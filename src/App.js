@@ -4,17 +4,21 @@ import todosList from "./todos.json";
 
 class App extends Component {
   state = {
+    value:"",
     todos: todosList
   };
+
+  //create todo
   handleKeyPress = (event)=>{
     
     if(event.key === 'Enter'){
-      console.log("i have been entered");
+
       if(event.target.value !== ""){
-        let newEntry = {"userId":1, "id":todosList.length+1, "title":event.target.value,"completed":false};
-        this.state.todos.push(newEntry);
-        this.setState({todos:todosList});
-        event.target.value = "";
+        const newtodos = this.state.todos.slice();
+        let newEntry = {"userId":1, "id":Math.ceil(Math.random()*1000000), "title":event.target.value,"completed":false};
+        newtodos.push(newEntry);
+        this.setState({todos:newtodos,value:""});
+        
         
       }
     }
@@ -52,6 +56,9 @@ class App extends Component {
     todos:newtodos
   })
 }
+handleOnChange = (event)=>{
+  this.setState({value: event.target.value})
+}
   render() {
     return (
       <section className="todoapp">
@@ -60,7 +67,7 @@ class App extends Component {
           <input
             className="new-todo"
             placeholder="What needs to be done?"
-            autoFocus onKeyPress={this.handleKeyPress}
+            autoFocus onKeyPress={this.handleKeyPress} onChange={this.handleOnChange} value={this.state.value}
           />
         </header>
         <TodoList todos={this.state.todos} toggleComplete={this.toggleComplete} handleDeleteTodo={this.handleDeleteTodo}/>
